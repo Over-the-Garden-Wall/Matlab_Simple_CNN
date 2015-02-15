@@ -17,7 +17,7 @@ function cnn = create_cnn_2d(feature_maps, varargin)
 
     s = p.Results;
 
-    cnn.in_params = {feature_maps, varargin{:}};
+    cnn.in_params = s;
 
     cnn.num_layers = length(feature_maps);    
     
@@ -65,7 +65,7 @@ function cnn = create_cnn_2d(feature_maps, varargin)
     if length(s.lambda) == 1
         s.lambda = s.lambda*ones(1, cnn.num_layers);
     end
-
+    cnn.lambda = s.lambda;
 %     if ~iscell(s.lambda)
 %         lambda = cell(1, cnn.num_layers);
 %         for l = 1:cnn.num_layers-1
@@ -78,6 +78,7 @@ function cnn = create_cnn_2d(feature_maps, varargin)
     if length(s.Blambda) == 1
         s.Blambda = s.Blambda*ones(1, cnn.num_layers);
     end
+    cnn.Blambda = s.Blambda;
 
 %     if ~iscell(s.Blambda)
 %         Blambda = cell(1, cnn.num_layers);
