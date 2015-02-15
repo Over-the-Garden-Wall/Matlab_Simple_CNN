@@ -47,13 +47,13 @@ function cnn = create_cnn_2d(feature_maps, varargin)
         s.max_pooling = ones(cnn.num_layers-1,1)*s.max_pooling;
     end
     
-    if ~iscell(s.max_pooling)
-        mp = cell(1, cnn.num_layers-1);
-        for l = 1:cnn.num_layers-1
-            mp{l} = s.max_pooling(l,:);
-        end
-        s.max_pooling = mp;
-    end
+%     if ~iscell(s.max_pooling)
+%         mp = cell(1, cnn.num_layers-1);
+%         for l = 1:cnn.num_layers-1
+%             mp{l} = s.max_pooling(l,:);
+%         end
+%         s.max_pooling = mp;
+%     end
     
 %     weight_size = cell(1,cnn.num_layers-1);
 %     for l = 1:cnn.num_layers-1
@@ -110,8 +110,6 @@ function cnn = create_cnn_2d(feature_maps, varargin)
             
     
     %initialize weights
-    disp(s.filter_size)
-    disp(s.feature_maps)
         
     for l = 1:nl-1
         cnn.W{l} = randn([s.filter_size(l,:), s.feature_maps(l), s.feature_maps(l+1)]) * s.sigma(l);
@@ -164,7 +162,6 @@ function cnn = create_cnn_2d(feature_maps, varargin)
     out_size_1pix = ones(1,cnn.num_dims);
     out_size_2pix = 2*ones(1,cnn.num_dims);
     
-    disp(s.max_pooling)
     for l = nl-1:-1:1
         out_size_1pix = out_size_1pix .* s.max_pooling(l,:);
         out_size_1pix = out_size_1pix + s.filter_size(l,:) - 1;
