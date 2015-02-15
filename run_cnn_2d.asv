@@ -25,10 +25,7 @@ function cnn = run_cnn_2d(cnn, input_image)
         cnn.pF{l+1} = zeros(pFsize);
 
         %convolution
-        disp(size(cnn.W{l}));
-        disp(size(cnn.F{l}));
-        disp(size(cnn.pF{l+1}));
-        
+        disp(size(cnn.W{l}
         
         for pm = 1:size(cnn.F{l}, 3)
             for nm = 1:size(cnn.pF{l+1}, 3)
