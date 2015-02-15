@@ -76,7 +76,7 @@ function cnn = create_cnn_2d(feature_maps, varargin)
 
 
     if length(s.Blambda) == 1
-        s.Blambda = s.Blambda*ones(1, cnn.num_layers);
+        s.Blambda = s.Blambda*ones(1, cnn.num_layers-1);
     end
     cnn.Blambda = s.Blambda;
 
