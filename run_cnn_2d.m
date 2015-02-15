@@ -21,7 +21,7 @@ function cnn = run_cnn_2d(cnn, input_image)
         inSz = size(cnn.F{l});
         filter_size = size(cnn.W{l});
         
-        pFsize = [(inSz(1:2) - filter_size(l:2) + 1), size(cnn.W{l}, 3)];
+        pFsize = [(inSz(1:2) - filter_size(1:2) + 1), size(cnn.W{l}, 3)];
         cnn.pF{l+1} = zeros(pFsize);
 
         %convolution
