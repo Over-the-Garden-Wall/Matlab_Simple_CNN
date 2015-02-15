@@ -46,6 +46,7 @@ function cnn = create_cnn_2d(feature_maps, varargin)
     if size(s.max_pooling,1) == 1
         s.max_pooling = ones(cnn.num_layers-1,1)*s.max_pooling;
     end
+    cnn.max_pooling = s.max_pooling;
     
 %     if ~iscell(s.max_pooling)
 %         mp = cell(1, cnn.num_layers-1);
