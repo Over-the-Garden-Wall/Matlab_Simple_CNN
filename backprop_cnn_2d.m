@@ -14,13 +14,13 @@ function cnn = backprop_cnn_2d(cnn, label)
     for l = nl-2:-1:1
         cnn.dEdB{l} = zeros(size(cnn.F{l+1}));
         disp(size(cnn.dEdB{l}));
-        disp(size(cnn.W{l}));
+        disp(size(cnn.W{l+1}));
         
         
         for pm = 1:size(cnn.F{l+1}, 3)
             for nm = 1:size(cnn.F{l+2}, 3)
                 cnn.dEdB{l}(:,:,pm) = cnn.dEdB{l}(:,:,pm) + ...
-                    convn(cnn.dEdB{l+1}(:,:,nm), cnn.W{l}(end:-1:1,end:-1:1,pm, nm), 'full');
+                    convn(cnn.dEdB{l+1}(:,:,nm), cnn.W{l+1}(end:-1:1,end:-1:1,pm, nm), 'full');
             end
         end
         
