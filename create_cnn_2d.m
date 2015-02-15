@@ -110,6 +110,9 @@ function cnn = create_cnn_2d(feature_maps, varargin)
             
     
     %initialize weights
+    disp(s.filter_size)
+        disp(s.feature_maps)
+        
     for l = 1:nl-1
         cnn.W{l} = randn([s.filter_size(l,:), s.feature_maps(l), s.feature_maps(l+1)]) * s.sigma(l);
     end
