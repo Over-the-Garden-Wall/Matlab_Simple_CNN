@@ -9,9 +9,13 @@ function cnn = backprop_cnn_2d(cnn, label)
     nl = cnn.num_layers;
     
     cnn.dEdB{end} = cnn.dEf(cnn.F{end}, label) .* cnn.df{end}(cnn.pF{end}, cnn.F{end});
+    disp(size(cnn.dEdB{end}));
     
     for l = nl-2:-1:1
         cnn.dEdB{l} = zeros(size(cnn.F{l+1}));
+        disp(size(cnn.dEdB{l}));
+        disp(size(cnn.W{l}));
+        
         
         for pm = 1:size(cnn.F{l+1}, 3)
             for nm = 1:size(cnn.F{l+2}, 3)

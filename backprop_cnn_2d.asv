@@ -1,7 +1,7 @@
 function cnn = backprop_cnn_2d(cnn, label)
 
     if ~all(size(cnn.F{end}) == size(label))
-        
+        error('label is the wrong size');
     end
 
     cnn.E = cnn.Ef(cnn.F{end}, label);    
@@ -9,6 +9,7 @@ function cnn = backprop_cnn_2d(cnn, label)
     nl = cnn.num_layers;
     
     cnn.dEdB{end} = cnn.dEf(cnn.F{end}, label) .* cnn.df{end}(cnn.pF{end}, cnn.F{end});
+    disp(size(cnn.dEdB{
     
     for l = nl-2:-1:1
         cnn.dEdB{l} = zeros(size(cnn.F{l+1}));
@@ -39,7 +40,8 @@ function cnn = backprop_cnn_2d(cnn, label)
             cnn.B{l}(m) = cnn.B{l}(m) - sum(sum(cnn.dEdB{l})) * cnn.Blambda(l);
         end
         
-        cnn.W{l} = cnn
+        cnn.W{l} = cnn.W{l} - cnn.dEdW{l} * cnn.lamba(l);
     end
+
 end
         
