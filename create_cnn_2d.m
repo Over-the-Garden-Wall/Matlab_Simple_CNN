@@ -34,13 +34,13 @@ function cnn = create_cnn_2d(feature_maps, varargin)
         s.filter_size = ones(cnn.num_layers-1,1)*s.filter_size;
     end
 
-    if ~iscell(s.filter_size)
-        fs = cell(1, cnn.num_layers-1);
-        for l = 1:cnn.num_layers-1
-            fs{l} = s.filter_size(l,:);
-        end
-        s.filter_size = fs;
-    end
+%     if ~iscell(s.filter_size)
+%         fs = cell(1, cnn.num_layers-1);
+%         for l = 1:cnn.num_layers-1
+%             fs{l} = s.filter_size(l,:);
+%         end
+%         s.filter_size = fs;
+%     end
 
     
     if size(s.max_pooling,1) == 1
