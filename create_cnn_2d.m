@@ -125,16 +125,16 @@ function cnn = create_cnn_2d(feature_maps, varargin)
     %initialize nonlinearities
     for l = 1:nl-1
         
-        if strcmp(s.non_lin{l}, 'linear')
+        if strcmp(s.nonlinearity{l}, 'linear')
             cnn.f{l} = @(x) (x);
             cnn.df{l} = @(x,y) (1);
-        elseif strcmp(s.non_lin{l}, 'logsig')
+        elseif strcmp(s.nonlinearity{l}, 'logsig')
             cnn.f{l} = @(x) (1./(1 + exp(-x)));
             cnn.df{l} = @(x,y) ( y .* (1-y) );
-        elseif strcmp(s.non_lin{l}, 'tanh')
+        elseif strcmp(s.nonlinearity{l}, 'tanh')
             cnn.f{l} = @(x) (tanh(x));
             cnn.df{l} = @(x,y) ((1 - y.^2));
-        elseif strcmp(s.non_lin{l}, 'rectify')
+        elseif strcmp(s.nonlinearity{l}, 'rectify')
             cnn.f{l} = @(x) (max(x,0));
             cnn.df{l} = @(x,y) (y > 0);       
         else
