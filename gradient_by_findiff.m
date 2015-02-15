@@ -30,7 +30,7 @@ function cnn = gradient_by_findiff(cnn, input_image, label, delta)
             cnn = run_cnn_2d(cnn, input_image);
             new_E = cnn.Ef(cnn.F{end}, label);
             cnn.B{l}(k) = cnn.B{l}(k) - delta;
-            cnn.dEdB{l}(k) = (new_E - base_E) / delta;
+            cnn.dEdB{l}(k) = (sum(new_E(:)) - base_E) / delta;
         end
     end
     
