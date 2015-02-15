@@ -26,7 +26,6 @@ function cnn = run_cnn_2d(cnn, input_image)
         %convolution        
         for pm = 1:size(cnn.F{l}, 3)
             for nm = 1:size(cnn.pF{l+1}, 3)
-                disp([pm nm])
                 
                 %this line should be far and away the most expensive
                 cnn.pF{l+1}(:,:, nm) = cnn.pF{l+1}(:,:, nm) + convn(cnn.F{l}(:,:,pm), cnn.W{l}(:,:,pm,nm), 'valid');
