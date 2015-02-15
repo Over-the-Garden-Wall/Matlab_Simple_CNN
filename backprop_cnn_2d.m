@@ -41,7 +41,7 @@ function cnn = backprop_cnn_2d(cnn, label)
     for l = 1:nl - 1
         disp(size(cnn.dEdB{l}));
         
-        cnn.B{l} = cnn.B{l} - squeeze(sum(sum(cnn.dEdB{l})))' .* cnn.Blambda;
+        cnn.B{l} = cnn.B{l} - squeeze(sum(sum(cnn.dEdB{l})))' * cnn.Blambda(l);
         
         cnn.W{l} = cnn.W{l} - cnn.dEdW{l} * cnn.lamba(l);
     end
