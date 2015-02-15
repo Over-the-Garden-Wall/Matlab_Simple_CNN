@@ -55,36 +55,36 @@ function cnn = create_cnn_2d(feature_maps, varargin)
         s.max_pooling = mp;
     end
     
-    weight_size = cell(1,cnn.num_layers-1);
-    for l = 1:cnn.num_layers-1
-        weight_size{l} = [s.filter_size{l} feature_maps(l) feature_maps(l+1)];
-    end
+%     weight_size = cell(1,cnn.num_layers-1);
+%     for l = 1:cnn.num_layers-1
+%         weight_size{l} = [s.filter_size(l,:) feature_maps(l) feature_maps(l+1)];
+%     end
 
 
     if length(s.lambda) == 1
         s.lambda = s.lambda*ones(1, cnn.num_layers);
     end
 
-    if ~iscell(s.lambda)
-        lambda = cell(1, cnn.num_layers);
-        for l = 1:cnn.num_layers-1
-            lambda{l} = s.lambda(l)*ones(weight_size{l});
-        end
-        s.lambda = lambda;
-    end
+%     if ~iscell(s.lambda)
+%         lambda = cell(1, cnn.num_layers);
+%         for l = 1:cnn.num_layers-1
+%             lambda{l} = s.lambda(l)*ones(weight_size{l});
+%         end
+%         s.lambda = lambda;
+%     end
 
 
     if length(s.Blambda) == 1
         s.Blambda = s.Blambda*ones(1, cnn.num_layers);
     end
 
-    if ~iscell(s.Blambda)
-        Blambda = cell(1, cnn.num_layers);
-        for l = 1:cnn.num_layers
-            Blambda{l} = s.Blambda(l)*ones(1,feature_maps(l));
-        end
-        s.Blambda = Blambda;
-    end
+%     if ~iscell(s.Blambda)
+%         Blambda = cell(1, cnn.num_layers);
+%         for l = 1:cnn.num_layers
+%             Blambda{l} = s.Blambda(l)*ones(1,feature_maps(l));
+%         end
+%         s.Blambda = Blambda;
+%     end
 
 
     if length(s.sigma) == 1
@@ -111,7 +111,7 @@ function cnn = create_cnn_2d(feature_maps, varargin)
     
     %initialize weights
     disp(s.filter_size)
-        disp(s.feature_maps)
+    disp(s.feature_maps)
         
     for l = 1:nl-1
         cnn.W{l} = randn([s.filter_size(l,:), s.feature_maps(l), s.feature_maps(l+1)]) * s.sigma(l);
