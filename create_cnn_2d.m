@@ -164,6 +164,7 @@ function cnn = create_cnn_2d(feature_maps, varargin)
     out_size_1pix = ones(1,cnn.num_dims);
     out_size_2pix = 2*ones(1,cnn.num_dims);
     
+    disp(s.max_pooling)
     for l = nl-1:-1:1
         out_size_1pix = out_size_1pix .* s.max_pooling(l,:);
         out_size_1pix = out_size_1pix + s.filter_size(l,:) - 1;
