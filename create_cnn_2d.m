@@ -25,7 +25,7 @@ function cnn = create_cnn_2d(feature_maps, varargin)
         nlin = cell(cnn.num_layers,1);
         nlin{1} = 'linear';
         for l = 2:cnn.num_layers
-            nlin{l} = s.non_lin;
+            nlin{l} = s.nonlinearity;
         end
         s.nonlinearity = nlin;
     end
