@@ -16,6 +16,8 @@ function cnn = run_cnn_2d(cnn, input_image)
     
     %actual run
     for l = 1:cnn.num_layers-1
+%         disp(l)
+        
         inSz = size(cnn.F{l});
         filter_size = size(cnn.W{l});
         
@@ -28,7 +30,7 @@ function cnn = run_cnn_2d(cnn, input_image)
                 %this line should be far and away the most expensive
                 cnn.pF{l+1}(:,:, nm) = cnn.pF{l+1}(:,:, nm) + convn(cnn.F{l}(:,:,pm), cnn.W{l}(:,:,pm,nm), 'valid');
             end
-            cnn.pF{l+1}(:,:, nm) = cnn.pF{l+1}(:,:, nm) + cnn.B{l+1}(nm);
+            cnn.pF{l+1}(:,:, nm) = cnn.pF{l+1}(:,:, nm) + cnn.B{l}(nm);
         end
         
         cnn.F{l+1} = cnn.f{l}(cnn.pF{l+1});
