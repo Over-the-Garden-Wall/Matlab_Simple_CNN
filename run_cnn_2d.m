@@ -42,7 +42,7 @@ function cnn = run_cnn_2d(cnn, input_image)
                 pFsize(3)]);
             cnn.F{l+1} = permute(cnn.F{l+1}, [1 3 5 2 4]);
             cnn.F{l+1} = cnn.F{l+1}(:,:,:,:);
-            cnn.F{l+1} = max(cnn.F{l+1}, [], 4);
+            [cnn.F{l+1}, cnn.max_pick{l}] = max(cnn.F{l+1}, [], 4);
         end
     end
 end
