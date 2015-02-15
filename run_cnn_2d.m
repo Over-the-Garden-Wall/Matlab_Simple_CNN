@@ -19,6 +19,9 @@ function cnn = run_cnn_2d(cnn, input_image)
         inSz = size(cnn.F{l});
         filter_size = size(cnn.W{l});
         
+        disp(inSz)
+        disp(filter_size)
+        
         pFsize = [(inSz(1:2) - filter_size(l, :) + 1), size(cnn.W{l}, 3)];
         cnn.pF{l+1} = zeros(pFsize);
 
