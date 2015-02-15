@@ -16,7 +16,6 @@ function cnn = run_cnn_2d(cnn, input_image)
     
     %actual run
     for l = 1:cnn.num_layers-1
-%         disp(l)
         
         inSz = size(cnn.F{l});
         filter_size = size(cnn.W{l});
@@ -24,12 +23,7 @@ function cnn = run_cnn_2d(cnn, input_image)
         pFsize = [(inSz(1:2) - filter_size(1:2) + 1), size(cnn.W{l}, 4)];
         cnn.pF{l+1} = zeros(pFsize);
 
-        %convolution
-        disp(size(cnn.W{l}));
-        disp(size(cnn.F{l}));
-        disp(size(cnn.pF{l+1}));
-        
-        
+        %convolution        
         for pm = 1:size(cnn.F{l}, 3)
             for nm = 1:size(cnn.pF{l+1}, 3)
                 disp([pm nm])
