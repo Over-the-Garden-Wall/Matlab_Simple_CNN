@@ -30,13 +30,6 @@
     train_img(3:end-2, 3:end-2, :) = train_img_raw;
 
     
-    
-    var_names = {'test_img', 'test_lbl', 'train_img', 'train_lbl'};
-    for n = 1:length(var_names)
-        eval([var_names{n} '_raw = permute(' var_names{n} '_raw, [3 1 2]);']);
-        eval([var_names{n} ' = zeros(size(' var_names{n} '_raw) + [4 4 0]);']);
-        eval([var_names{n} '(3:end-2, 3:end-2, :) = var_names{n};']);
-    end
     train_img = train_img/255;
     test_img = test_img/255;    
     
