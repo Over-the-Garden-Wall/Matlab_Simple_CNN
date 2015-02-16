@@ -15,9 +15,9 @@
     
     %read data
     test_img_raw = read_IDX('t10k-images.idx3-ubyte');
-    test_lbl_raw = read_IDX('t10k-labels.idx1-ubyte');
+    test_lbl = read_IDX('t10k-labels.idx1-ubyte');
     train_img_raw = read_IDX('train-images.idx3-ubyte');
-    train_lbl_raw = read_IDX('train-labels.idx1-ubyte');
+    train_lbl = read_IDX('train-labels.idx1-ubyte');
     
     %pad data (natively 28) and reorder dimensions for convenience, rescale
     %to [0 1] from [0 255]
@@ -47,7 +47,7 @@
         
         cnn = run_cnn(cnn, train_img(:,:,image_pick));        
 
-        lbl = zeros(10,1);
+        lbl = zeros(1, 1, 10);
         lbl(train_lbl(image_pick)) = 1;
         cnn = backprop_cnn(cnn, lbl);
         
@@ -57,7 +57,7 @@
             for n = 1:size(test_img,3)
                 cnn = run_cnn(cnn, test_img(:,:,n));        
 
-                lbl = zeros(10,1);
+                lbl = zeros(1, 1, 10);
                 lbl(test_lbl(n)) = 1;
                 
                 E = cnn.Ef(cnn.F{end}, lbl);
