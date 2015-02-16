@@ -21,6 +21,16 @@
     
     %pad data (natively 28) and reorder dimensions for convenience, rescale
     %to [0 1] from [0 255]
+    test_img_raw = permute(test_img_raw, [3 1 2]);
+    test_img = zeros(size(test_img_raw) + [4 4 0]);
+    test_img(3:end-2, 3:end-2, :) = test_img_raw;
+    
+    train_img_raw = permute(train_img_raw, [3 1 2]);
+    train_img = zeros(size(train_img_raw) + [4 4 0]);
+    train_img(3:end-2, 3:end-2, :) = train_img;
+
+    
+    
     var_names = {'test_img', 'test_lbl', 'train_img', 'train_lbl'};
     for n = 1:length(var_names)
         eval([var_names{n} '_raw = permute(' var_names{n} '_raw, [3 1 2]);']);
