@@ -27,7 +27,7 @@
     
     train_img_raw = permute(train_img_raw, [2 3 1]);
     train_img = zeros(size(train_img_raw) + [4 4 0]);
-    train_img(3:end-2, 3:end-2, :) = train_img;
+    train_img(3:end-2, 3:end-2, :) = train_img_raw;
 
     
     
@@ -46,8 +46,10 @@
     
     train_error = zeros(training_iterations,1);
     test_error = zeros(floor(training_iterations / testing_frequency),1);
-    
+
+    tic    
     for t = 1:training_iterations
+
         image_pick = ceil(rand*size(train_img,3));
         
         cnn = run_cnn(cnn, train_img(:,:,image_pick));        
@@ -69,7 +71,9 @@
                 test_error(t/testing_frequency) = test_error(t/testing_frequency) + sum(E(:));
             end
             test_error(t/testing_frequency) = test_error(t/testing_frequency) / size(test_img,3);
-            
+           
+            time_spent = toc;
+            disp(['testing! ' num2str(t) ' iterations completed in ' toc ' seconds']);
         end
     end
       
