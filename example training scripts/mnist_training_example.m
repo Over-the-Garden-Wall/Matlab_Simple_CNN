@@ -1,5 +1,5 @@
 %train an architecture like lenet-5 on the mnist dataset
-
+    addpath('../');
 
     %training_parameters
     testing_frequency = 500;
@@ -8,9 +8,9 @@
     
 
     %make network
-%     cnn = create_cnn([1 6 16 12 84 10], ...
-%         'max_pooling', [2 2; 2 2; 1 1; 1 1], ...
-%         'filter_size', [5 5; 5 5; 5 5; 1 1]);
+    cnn = create_cnn([1 6 16 12 84 10], ...
+        'max_pooling', [2 2; 2 2; 1 1; 1 1; 1 1], ...
+        'filter_size', [5 5; 5 5; 5 5; 1 1; 1 1]);
     
     
     %read data
