@@ -1,17 +1,51 @@
-function cnn = run_cnn(cnn, input_image)
-    %runs a forward pass on the cnn using input_image as input
+function cnn = run_cnn_2d(cnn, input_image)
 
-    nd = cnn.num_dims; %brevity
+    %check if the input is inefficiently sized and crop it if so.
+    out_size = size(input_image);
+    out_size = floor((out_size(1:2) - cnn.min_input_size) ./ cnn.inc_input_size);
+    %out_size is actually the output size - 1
+    
+    if any(out_size ~= floor(out_size))
+        in_size = out_size.*cnn.inc_input_size + cnn.min_input_size;
+        
+        input_image = input_image(1:in_size(1), 1:in_size(2), :);
+    end
 
-    if nd == 2
-        cnn = run_cnn_2d(cnn, input_image);
-    elseif nd == 3
-        cnn = run_cnn_3d(cnn, input_image);
-    else
-        cnn = run_cnn_nd(cnn, input_image);
+    %set the input!
+    cnn.F{1} = input_image;
+    
+    %actual run
+    for l = 1:cnn.num_layers-1
+        
+        inSz = size(cnn.F{l});
+        filter_size = size(cnn.W{l});
+        
+        pFsize = [(inSz(1:2) - filter_size(1:2) + 1), size(cnn.W{l}, 4)];
+        cnn.pF{l+1} = zeros(pFsize);
+
+        %convolution        
+        for nm = 1:size(cnn.pF{l+1}, 3)
+            for pm = 1:size(cnn.F{l}, 3)
+                
+                %this line should be far and away the most expensive for
+                %the forward pass
+                cnn.pF{l+1}(:,:, nm) = cnn.pF{l+1}(:,:, nm) + convn(cnn.F{l}(:,:,pm), cnn.W{l}(:,:,pm,nm), 'valid');
+            end
+            cnn.pF{l+1}(:,:, nm) = cnn.pF{l+1}(:,:, nm) + cnn.B{l}(nm);
+        end
+        
+        
+        if any(cnn.max_pooling(l,:) > 1);
+            cnn.fpF{l+1} = cnn.f{l}(cnn.pF{l+1});
+            cnn.F{l+1} = reshape(cnn.fpF{l+1}, ...
+                [cnn.max_pooling(l, 1), pFsize(1) / cnn.max_pooling(l, 1), ...
+                cnn.max_pooling(l, 2), pFsize(2) / cnn.max_pooling(l, 2), ...
+                pFsize(3)]);
+            cnn.F{l+1} = permute(cnn.F{l+1}, [2 4 5 1 3]);
+            cnn.F{l+1} = cnn.F{l+1}(:,:,:,:);
+            [cnn.F{l+1}, cnn.max_pick{l}] = max(cnn.F{l+1}, [], 4);
+        else
+            cnn.F{l+1} = cnn.f{l}(cnn.pF{l+1});
+        end
     end
 end
-
-    
-
-    
