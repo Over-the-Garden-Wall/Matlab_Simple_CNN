@@ -27,22 +27,25 @@ function cnn = run_cnn_2d(cnn, input_image)
         for nm = 1:size(cnn.pF{l+1}, 3)
             for pm = 1:size(cnn.F{l}, 3)
                 
-                %this line should be far and away the most expensive
+                %this line should be far and away the most expensive for
+                %the forward pass
                 cnn.pF{l+1}(:,:, nm) = cnn.pF{l+1}(:,:, nm) + convn(cnn.F{l}(:,:,pm), cnn.W{l}(:,:,pm,nm), 'valid');
             end
             cnn.pF{l+1}(:,:, nm) = cnn.pF{l+1}(:,:, nm) + cnn.B{l}(nm);
         end
         
-        cnn.F{l+1} = cnn.f{l}(cnn.pF{l+1});
         
         if any(cnn.max_pooling(l,:) > 1);
-            cnn.F{l+1} = reshape(cnn.F{l+1}, ...
-                [pFsize(1) / cnn.max_pooling(l, 1), cnn.max_pooling(l, 1), ...
-                pFsize(2) / cnn.max_pooling(l, 2), cnn.max_pooling(l, 2), ...
+            cnn.fpF{l+1} = cnn.f{l}(cnn.pF{l+1});
+            cnn.F{l+1} = reshape(cnn.fpF{l+1}, ...
+                [cnn.max_pooling(l, 1), pFsize(1) / cnn.max_pooling(l, 1), ...
+                cnn.max_pooling(l, 2), pFsize(2) / cnn.max_pooling(l, 2), ...
                 pFsize(3)]);
-            cnn.F{l+1} = permute(cnn.F{l+1}, [1 3 5 2 4]);
+            cnn.F{l+1} = permute(cnn.F{l+1}, [2 4 5 1 3]);
             cnn.F{l+1} = cnn.F{l+1}(:,:,:,:);
             [cnn.F{l+1}, cnn.max_pick{l}] = max(cnn.F{l+1}, [], 4);
+        else
+            cnn.F{l+1} = cnn.f{l}(cnn.pF{l+1});
         end
     end
 end

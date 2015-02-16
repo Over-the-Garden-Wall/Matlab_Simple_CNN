@@ -95,7 +95,9 @@ function cnn = create_cnn_2d(feature_maps, varargin)
 
     nl = cnn.num_layers;
     cnn.pF = cell(nl,1);
+    cnn.fpF = cell(nl,1);
     cnn.F = cell(nl,1);
+    
     cnn.max_pick = cell(nl-1,1);
 
     cnn.W = cell(nl-1,1);
