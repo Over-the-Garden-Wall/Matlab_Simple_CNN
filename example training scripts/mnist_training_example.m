@@ -3,7 +3,7 @@
 
     %training_parameters
     testing_frequency = 500;
-    training_iterations = 10000;
+    training_iterations = 5000;
     
     
 
@@ -48,17 +48,17 @@
         cnn = run_cnn(cnn, train_img(:,:,image_pick));        
 
         lbl = zeros(1, 1, 10);
-        lbl(train_lbl(image_pick)) = 1;
+        lbl(1+train_lbl(image_pick)) = 1;
         cnn = backprop_cnn(cnn, lbl);
         
         train_error(t) = sum(cnn.E(:));
         
         if mod(t, testing_frequency) == 0
-            for n = 1:size(test_img,3)
+            for n = 1:size(test_img,3) %size(test_img,3)
                 cnn = run_cnn(cnn, test_img(:,:,n));        
 
                 lbl = zeros(1, 1, 10);
-                lbl(test_lbl(n)) = 1;
+                lbl(1+test_lbl(n)) = 1;
                 
                 E = cnn.Ef(cnn.F{end}, lbl);
                 test_error(t/testing_frequency) = test_error(t/testing_frequency) + sum(E(:));
@@ -66,7 +66,7 @@
             test_error(t/testing_frequency) = test_error(t/testing_frequency) / size(test_img,3);
            
             time_spent = toc;
-            disp(['testing! ' num2str(t) ' iterations completed in ' toc ' seconds']);
+            disp(['testing! ' num2str(t) ' iterations completed in ' num2str(toc) ' seconds']);
         end
     end
       
