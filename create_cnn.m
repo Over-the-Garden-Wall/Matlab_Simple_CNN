@@ -108,7 +108,10 @@ function cnn = create_cnn_2d(feature_maps, varargin)
     cnn.dEdB = cell(nl-1,1);
     cnn.lB = cell(nl-1,1);
 
-
+    cnn.fft_forward = false(nl-1,1);
+    cnn.fft_backward = false(nl-1,1);
+    cnn.fft_gradient = false(nl-1,1);
+    cnn.mlp_layer = false(nl-1,1);        
     
     cnn.f = cell(nl-1,1);
     cnn.df = cell(nl-1,1);
@@ -180,5 +183,79 @@ function cnn = create_cnn_2d(feature_maps, varargin)
     cnn.min_input_size = out_size_1pix;
     cnn.inc_input_size = out_size_2pix - out_size_1pix;
         
+    
+    %check for mlp layers
+    for l = 1:nl-1
+        if size(cnn.W{l},1) == 1 && size(cnn.W{l},2) == 1
+            cnn.mlp_layer(l) = true;
+        end
+    end
+    
+    %plan out conv layers
+    out_size_1pix = ones(1,cnn.num_dims);    
+    for l = nl-1:-1:1
+        outIm = randn([out_size_1pix, size(cnn.W{l},4)]);
+        
+        out_size_1pix = out_size_1pix .* s.max_pooling(l,:);
+        out_size_1pix = out_size_1pix + s.filter_size(l,:) - 1;
+        
+        if ~cnn.mlp_layer(l)
+        
+            inIm = randn([out_size_1pix, size(cnn.W{l},3)]);
+
+            %test forward conv
+            tic
+            for t = 1:10
+                run_conv_layer(inIm, cnn.W{l}, cnn.B{l});
+            end
+            standard_time = toc;
+
+            tic
+            for t = 1:10
+                run_fftconv_layer(inIm, cnn.W{l}, cnn.B{l});
+            end
+            fft_time = toc;
+
+            if fft_time < standard_time
+                cnn.fft_forward(l) = true;
+            end
+            
+            %test backward conv
+            tic
+            for t = 1:10
+                back_conv_layer(outIm, cnn.W{l});
+            end
+            standard_time = toc;
+
+            tic
+            for t = 1:10
+                back_fftconv_layer(outIm, cnn.W{l});
+            end
+            fft_time = toc;
+
+            if fft_time < standard_time
+                cnn.fft_backward(l) = true;
+            end
+            
+            %test gradient conv
+            tic
+            for t = 1:10
+                gradient_conv_layer(inIm, outIm);                
+            end
+            standard_time = toc;
+
+            tic
+            for t = 1:10
+                gradient_fftconv_layer(inIm, outIm);
+            end
+            fft_time = toc;
+
+            if fft_time < standard_time
+                cnn.fft_gradient(l) = true;
+            end
+            
+        end
+    end
+            
     
 end    

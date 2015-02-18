@@ -2,17 +2,23 @@
     addpath('../');
 
     %training_parameters
-    testing_frequency = 500;
-    training_iterations = 5000;
-    
+    testing_frequency = 60000;
+    training_iterations = 60000;
+    test_miniset = 10000;
     
 
     %make network
-    cnn = create_cnn([1 6 16 12 84 10], ...
+    cnn = create_cnn([1 6 16 120 84 10], ...
         'max_pooling', [2 2; 2 2; 1 1; 1 1; 1 1], ...
         'filter_size', [5 5; 5 5; 5 5; 1 1; 1 1]);
+%     cnn = create_cnn([1 6 16 10], ...
+%         'max_pooling', [2 2; 2 2; 1 1], ...
+%         'filter_size', [5 5; 5 5; 5 5]);
     
     
+    
+
+
     %read data
     test_img_raw = read_IDX('t10k-images.idx3-ubyte');
     test_lbl = read_IDX('t10k-labels.idx1-ubyte');
@@ -54,7 +60,7 @@
         train_error(t) = sum(cnn.E(:));
         
         if mod(t, testing_frequency) == 0
-            for n = 1:size(test_img,3) %size(test_img,3)
+            for n = 1:test_miniset
                 cnn = run_cnn(cnn, test_img(:,:,n));        
 
                 lbl = zeros(1, 1, 10);
