@@ -16,15 +16,21 @@ function cnn = backprop_cnn_2d(cnn, label)
             cnn.dEdB{l} = cnn.dEf(cnn.F{l+1}, label);            
         else
 
-            cnn.dEdB{l} = zeros(size(cnn.F{l+1}));
-
-            for pm = 1:size(cnn.F{l+1}, 3)
-                for nm = 1:size(cnn.F{l+2}, 3)
-                    cnn.dEdB{l}(:,:,pm) = cnn.dEdB{l}(:,:,pm) + ...
-                        convn(cnn.dEdB{l+1}(:,:,nm), cnn.W{l+1}(end:-1:1,end:-1:1,pm, nm), 'full');
-                end
+            
+            if cnn.mlp_layer(l+1)
+                %handle MLP case
+                
+                cnn.dEdB{l} = back_MLP_layer(cnn.dEdB{l+1}, cnn.W{l+1});
+                
+            elseif cnn.fft_backward(l+1)
+                
+                cnn.dEdB{l} = back_fftconv_layer(cnn.dEdB{l+1}, cnn.W{l+1});
+                                
+            else
+                
+                cnn.dEdB{l} = back_conv_layer(cnn.dEdB{l+1}, cnn.W{l+1});
+                
             end
-
         end
         
         if any(cnn.max_pooling(l,:) > 1)
@@ -49,17 +55,19 @@ function cnn = backprop_cnn_2d(cnn, label)
     
     
     for l = 1:nl-1
-        cnn.dEdW{l} = zeros(size(cnn.W{l}));
-        
-        for pm = 1:size(cnn.F{l}, 3)
-            for nm = 1:size(cnn.F{l+1}, 3)
-
-                %this is the backprop bottleneck
-                cnn.dEdW{l}(:,:,pm, nm) = ...
-                    convn(cnn.F{l}(end:-1:1,end:-1:1,pm), cnn.dEdB{l}(:, :, nm), 'valid');
-            end
+        if cnn.mlp_layer(l)
+            
+            cnn.dEdW{l} = gradient_MLP_layer(cnn.F{l}, cnn.dEdB{l});
+            
+        elseif cnn.fft_gradient(l)
+                        
+            cnn.dEdW{l} = gradient_fftconv_layer(cnn.F{l}, cnn.dEdB{l});
+            
+        else
+            
+            cnn.dEdW{l} = gradient_conv_layer(cnn.F{l}, cnn.dEdB{l});
+            
         end
-        
     end
     
     for l = 1:nl - 1
