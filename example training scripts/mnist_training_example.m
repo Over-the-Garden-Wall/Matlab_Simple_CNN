@@ -2,33 +2,17 @@
     addpath('../');
 
     %training_parameters
-<<<<<<< HEAD
     testing_frequency = 10000;
     training_iterations = 1200000;
-=======
-    testing_frequency = 60000;
-    training_iterations = 60000;
->>>>>>> origin/master
     test_miniset = 10000;
     
 
     %make network
     cnn = create_cnn([1 6 16 120 84 10], ...
         'max_pooling', [2 2; 2 2; 1 1; 1 1; 1 1], ...
-<<<<<<< HEAD
         'filter_size', [5 5; 5 5; 5 5; 1 1; 1 1], ...
         'nonlinearity', {'tanh', 'tanh', 'tanh', 'tanh', 'softmax'}, ...
         'error_fxn', 'xentropy');
-=======
-        'filter_size', [5 5; 5 5; 5 5; 1 1; 1 1]);
-%     cnn = create_cnn([1 6 16 10], ...
-%         'max_pooling', [2 2; 2 2; 1 1], ...
-%         'filter_size', [5 5; 5 5; 5 5]);
-    
-    
-    
->>>>>>> origin/master
-
 
     %read data
     test_img_raw = read_IDX('t10k-images.idx3-ubyte');
